@@ -9,9 +9,27 @@
 
 **`commitStream([defaultGithubUser, defaultGithubProject])`**
 
-Returns an object stream that you can pipe the output of `git log` to. The output of the stream is a series of objects, each representing a commit from the log.
+Returns an object stream that you can pipe a stream of newlines from the output of `git log` to. The output of the stream is a series of objects, each representing a commit from the log.`
 
 Intended to be used on a standard log format (not a simplified one using one of the simplifying `--format` options) but it will also process change stats if you `git log --stat`.
+
+Typical usage:
+
+```js
+var spawn      = require('child_process').spawn
+  , split2     = require('split2')
+  , listStream = require('list-stream')
+
+spawn('bash', [ '-c', 'git log' ])
+  .stdout.pipe(split2()) // break up by newline characters
+  .pipe(commitStream('rvagg', 'commit-stream'))
+  .pipe(listStream.obj(onCommitList))
+
+
+function onCommitList (err, list) {
+  // list is an array of objects
+}
+```
 
 Commit object properties:
 
