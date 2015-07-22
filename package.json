@@ -1,0 +1,28 @@
+{
+  "name": "commit-stream",
+  "version": "1.0.0",
+  "description": "Turn a `git log` into a stream of commit objects",
+  "main": "commit-stream.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rvagg/commit-stream.git"
+  },
+  "author": "Rod <rod@vagg.org> (http://r.va.gg/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rvagg/commit-stream/issues"
+  },
+  "homepage": "https://github.com/rvagg/commit-stream",
+  "devDependencies": {
+    "list-stream": "~1.0.0",
+    "split2": "~1.0.0",
+    "tape": "~4.0.1"
+  },
+  "dependencies": {
+    "strip-ansi": "~3.0.0",
+    "through2": "~2.0.0"
+  }
+}
