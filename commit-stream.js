@@ -70,7 +70,8 @@ function commitStream (ghUser, ghProject) {
   }
 
   function onEnd (callback) {
-    this.push(commit)
+    if (commit)
+      this.push(commit)
     callback()
   }
 }
