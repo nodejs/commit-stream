@@ -18,6 +18,20 @@ test('current plain commit log', function (t) {
 
     t.ok(list && list.length > 1, 'got a list')
 
+    t.deepEqual(list[list.length - 9], {
+        author      : { email: 'ralphtheninja@riseup.net', name: 'Lars-Magnus Skog' }
+      , description : [
+            'Fixes: https://github.com/rvagg/changelog-maker/issues/35'
+        ]
+      , ghIssue     : 1
+      , ghProject   : 'commit-stream'
+      , ghUser      : 'rvagg'
+      , prUrl       : 'https://github.com/rvagg/commit-stream/pull/1'
+      , sha         : '1bcfd072fd74399808fbcd5cf31ce5342dd6d70c'
+      , summary     : 'process: this should not match PR-URL'
+      , reviewers   : [ { email: 'rod@vagg.org', name: 'Rod Vagg' } ]
+    }, 'got correct ninth commit')
+
     t.deepEqual(list[list.length - 4], {
         author: { email: 'rod@vagg.org', name: 'Rod Vagg' }
       , sha: 'f92b93c3c7175b07f847dd45058b121cea6b3a20'
