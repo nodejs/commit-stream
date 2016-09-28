@@ -23,10 +23,22 @@ function commitStream (ghUser, ghProject) {
       commit = {
         sha: line.split(' ')[1]
       }
+    } else if (m = line.match(/^CommitDate: (.*)$/)) {
+      if (!commit)
+        throw new Error('wut?')
+      commit.commitDate = m[1].trim()
     } else if (m = line.match(/^Author: ([^<]+) <([^>]+)>$/)) {
       if (!commit)
         throw new Error('wut?')
       commit.author = { name: m[1], email: m[2] }
+    } else if (m = line.match(/^AuthorDate: (.*)$/)) {
+      if (!commit)
+        throw new Error('wut?')
+      commit.authorDate = m[1].trim()
+    } else if (m = line.match(/^Date: (.*)$/)) {
+      if (!commit)
+        throw new Error('wut?')
+      commit.authorDate = m[1].trim()
     } else if (m = line.match(/^\s+Reviewed[- ]?By:?\s*([^<]+) <([^>]+)>\s*$/i)) {
       if (!commit.reviewers)
         commit.reviewers = []
