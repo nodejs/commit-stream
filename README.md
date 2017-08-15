@@ -37,6 +37,8 @@ Commit object properties:
 * `author`: an object representing the author of the commit
   - `name`: the name of the committer
   - `email`: the email of the committer
+* `authorDate`: a string representing the date of the original commit by the author (never change)
+* `commitDate`: a string representing the date of the last change of the commit
 * `summary`: the one-line summary of the commit
 * `description`: the free-form text content of the summary, minus specific metadata lines
 * `reviewers`: an array containing objects with `name` and `email` properties if the commit metadata contains reviewers in a `Reviewed-By: Foo Bar <baz@boom>` format.
