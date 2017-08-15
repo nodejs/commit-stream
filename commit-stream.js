@@ -36,7 +36,7 @@ function commitStream (ghUser, ghProject) {
       if (ghUser && ghProject && (m = commit.prUrl.match(/^\s*#?(\d+)\s*$/))) {
         commit.prUrl = 'https://github.com/' + ghUser + '/' + ghProject + '/pull/' + m[1]
       }
-      if (m = commit.prUrl.match(/^(https?:\/\/.+\/([^\/]+)\/([^\/]+))\/\w+\/(\d+)$/i)) {
+      if (m = commit.prUrl.match(/^(https?:\/\/.+\/([^\/]+)\/([^\/]+))\/\w+\/(\d+)(\/)?$/i)) {
         commit.ghIssue   = +m[4]
         commit.ghUser    = m[2]
         commit.ghProject = m[3]
