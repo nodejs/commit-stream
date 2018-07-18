@@ -37,6 +37,7 @@ Commit object properties:
 * `author`: an object representing the author of the commit
   - `name`: the name of the committer
   - `email`: the email of the committer
+* `authors`: a list of such objects representing the authors of the commit, supporting multiple authors through `Co-authored-by:`
 * `authorDate`: a string representing the date of the original commit by the author (never change)
 * `commitDate`: a string representing the date of the last change of the commit
 * `summary`: the one-line summary of the commit

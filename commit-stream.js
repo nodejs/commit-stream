@@ -23,19 +23,21 @@ function commitStream (ghUser, ghProject) {
       commit = {
         sha: line.split(' ')[1]
       }
-    } else if (m = line.match(/^CommitDate: (.*)$/)) {
+    } else if (m = line.match(/^CommitDate:\s+(.*)$/)) {
       if (!commit)
         throw new Error('wut?')
       commit.commitDate = m[1].trim()
-    } else if (m = line.match(/^Author: ([^<]+) <([^>]+)>$/)) {
+    } else if (m = line.match(/^\s*(?:Author|Co[- ]?authored[- ]?by):?\s*([^<]+) <([^>]+)>\s*$/i)) {
       if (!commit)
         throw new Error('wut?')
-      commit.author = { name: m[1], email: m[2] }
-    } else if (m = line.match(/^AuthorDate: (.*)$/)) {
+      if (!commit.authors)
+        commit.authors = []
+      commit.authors.push({ name: m[1], email: m[2] })
+    } else if (m = line.match(/^AuthorDate:\s+(.*)$/)) {
       if (!commit)
         throw new Error('wut?')
       commit.authorDate = m[1].trim()
-    } else if (m = line.match(/^Date: (.*)$/)) {
+    } else if (m = line.match(/^Date:\s+(.*)$/)) {
       if (!commit)
         throw new Error('wut?')
       commit.authorDate = m[1].trim()
@@ -76,12 +78,16 @@ function commitStream (ghUser, ghProject) {
 
   function onLine (line, _, callback) {
     var commit = addLine(line)
+    if (commit && commit.authors && commit.authors.length > 0)
+      commit.author = commit.authors[0]
     if (commit)
       this.push(commit)
     callback()
   }
 
   function onEnd (callback) {
+    if (commit && commit.authors && commit.authors.length > 0)
+      commit.author = commit.authors[0]
     if (commit)
       this.push(commit)
     callback()
