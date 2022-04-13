@@ -46,7 +46,7 @@ export default function commitStream (ghUser, ghProject) {
         commit.reviewers = []
       }
       commit.reviewers.push({ name: m[1], email: m[2] })
-    } else if ((m = line.match(/^\s+PR(?:[- ]?URL)?:?\s*(.+)\s*$/)) !== null) {
+    } else if ((m = line.match(/^\s+PR(?:[- ]?URL)?:?\s*(.+)\s*$/) || line.match(/\(#(\d+)\)$/)) !== null) {
       commit.prUrl = m[1]
       if (
         typeof ghUser === 'string' &&
@@ -65,6 +65,9 @@ export default function commitStream (ghUser, ghProject) {
         commit.ghIssue = parseInt(m[4])
         commit.ghUser = m[2]
         commit.ghProject = m[3]
+      }
+      if ((m = line.match(/^ {4}(.*)\s\(#\d+\)$/)) && !commit.summary) {
+        commit.summary = m[1]
       }
     } else if (/^ {4}/.test(line) && (line = line.trim()).length !== 0) {
       if (commit.summary === undefined || commit.summary === null) {
