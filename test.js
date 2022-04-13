@@ -6,9 +6,14 @@ const through2     = require('through2')
     , listStream   = require('list-stream')
 
 
-function gitToList (gitCmd, callback) {
+function gitToList (gitCmd, user, repo, callback) {
+  if (typeof user === 'function') {
+    callback = user
+    user = undefined
+    repo = undefined
+  }
   var child = spawn('bash', [ '-c', gitCmd ])
-  child.stdout.pipe(split2()).pipe(commitStream()).pipe(listStream.obj(callback))
+  child.stdout.pipe(split2()).pipe(commitStream(user, repo)).pipe(listStream.obj(callback))
 }
 
 
@@ -122,6 +127,30 @@ test('current commit log with changes', function (t) {
       , insertions : 28
       , deletions  : 0
     }, 'got correct first commit changes')
+
+    t.end()
+  })
+})
+
+test('current commit log with ghUser and ghRepo passed', function (t) {
+  gitToList('git log', 'rvagg', 'commit-stream', function (err, list) {
+    t.error(err, 'no error')
+
+    t.ok(list && list.length > 1, 'got a list')
+
+    t.deepEqual(list[list.length - 18], {
+        sha    : 'b23208796d7e3fd08b36f6106aa7f027aa827137'
+      , authorDate: 'Mon Oct 11 19:29:18 2021 -0700'
+      , author : { name: 'Rich Trott', email: 'rtrott@gmail.com' }
+      , authors: [
+          { name: 'Rich Trott', email: 'rtrott@gmail.com' }
+      ]
+      , ghIssue     : 5
+      , ghProject   : 'commit-stream'
+      , ghUser      : 'rvagg'
+      , prUrl       : 'https://github.com/rvagg/commit-stream/pull/5'
+      , summary: 'chore: update strip-ansi to 6.x'
+    }, 'got correct pr url for green-button merge')
 
     t.end()
   })

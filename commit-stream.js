@@ -45,7 +45,7 @@ function commitStream (ghUser, ghProject) {
       if (!commit.reviewers)
         commit.reviewers = []
       commit.reviewers.push({ name: m[1], email: m[2] })
-    } else if (m = line.match(/^\s+PR(?:[- ]?URL)?:?\s*(.+)\s*$/)) {
+    } else if (m = line.match(/^\s+PR(?:[- ]?URL)?:?\s*(.+)\s*$/) || line.match(/\(#(\d+)\)$/)) {
       commit.prUrl = m[1]
       if (ghUser && ghProject && (m = commit.prUrl.match(/^\s*#?(\d+)\s*$/))) {
         commit.prUrl = 'https://github.com/' + ghUser + '/' + ghProject + '/pull/' + m[1]
@@ -54,6 +54,9 @@ function commitStream (ghUser, ghProject) {
         commit.ghIssue   = +m[4]
         commit.ghUser    = m[2]
         commit.ghProject = m[3]
+      }
+      if ((m = line.match(/^    (.*)\s\(#\d+\)$/)) && !commit.summary) {
+        commit.summary = m[1]
       }
     } else if (/^    /.test(line) && (line = line.trim()).length) {
       if (!commit.summary) {
