@@ -47,7 +47,7 @@ Commit object properties:
   - `insertions`: the number of new lines inserted
   - `deletions`: the number of old lines removed
 - `prUrl`: a URL pointing to a pull-request where this change was made if the commit metadata contains a `PR-URL: https://github.com/user/project/pull/XX` line. Note that whatever proceeds the `PR-URL: ` string will be collected in this property; one exception being that if a shortened `#XX` version is found and you have supplied `defaultGitHubUser` and `defaultGitHubProject` arguments to the constructor then a full GitHub pull-request will be reconstituted in its place.
-- `ghUser`, `ghProject`, `ghIssue`: if a proper GitHub pull request is found for the `prUrl` property (including shortened `#XX` ones), these properties will be added to point to the original user, project and issue (pull-request) for this change, as extracted from the URL.
+- `ghUser`, `ghProject`, `ghIssue`: if a proper GitHub pull request is found for the `prUrl` property (including shortened `#XX` ones), these properties will be added to point to the original user, project and issue (pull-request) for this change, as extracted from the URL. Also, if a commit message line ends with ` (#XX)` as is done with green-button merges, this will be used.
 
 ## License
 
