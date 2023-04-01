@@ -3,6 +3,7 @@
   "version": "1.1.0",
   "description": "Turn a `git log` into a stream of commit objects",
   "main": "commit-stream.js",
+  "type": "module",
   "scripts": {
     "build": "true",
     "test:ci": "npm run test",
@@ -19,13 +20,13 @@
   },
   "homepage": "https://github.com/rvagg/commit-stream",
   "devDependencies": {
-    "list-stream": "~1.0.0",
-    "split2": "~1.0.0",
+    "list-stream": "^2.1.0",
+    "split2": "^4.2.0",
     "tape": "^5.6.3"
   },
   "dependencies": {
-    "strip-ansi": "^6.0.1",
-    "through2": "~2.0.0"
+    "strip-ansi": "^7.0.1",
+    "through2": "^4.0.2"
   },
   "release": {
     "branches": [
