@@ -16,15 +16,14 @@ Intended to be used on a standard log format (not a simplified one using one of 
 Typical usage:
 
 ```js
-var spawn      = require('child_process').spawn
-  , split2     = require('split2')
-  , listStream = require('list-stream')
+import { spawn } from 'node:child_process'
+import split2 from 'split2'
+import listStream from 'list-stream'
 
-spawn('bash', [ '-c', 'git log' ])
+spawn('bash', ['-c', 'git log'])
   .stdout.pipe(split2()) // break up by newline characters
   .pipe(commitStream('rvagg', 'commit-stream'))
   .pipe(listStream.obj(onCommitList))
-
 
 function onCommitList (err, list) {
   // list is an array of objects
@@ -33,22 +32,22 @@ function onCommitList (err, list) {
 
 Commit object properties:
 
-* `sha`: the full commit sha
-* `author`: an object representing the author of the commit
+- `sha`: the full commit sha
+- `author`: an object representing the author of the commit
   - `name`: the name of the committer
   - `email`: the email of the committer
-* `authors`: a list of such objects representing the authors of the commit, supporting multiple authors through `Co-authored-by:`
-* `authorDate`: a string representing the date of the original commit by the author (never change)
-* `commitDate`: a string representing the date of the last change of the commit
-* `summary`: the one-line summary of the commit
-* `description`: the free-form text content of the summary, minus specific metadata lines
-* `reviewers`: an array containing objects with `name` and `email` properties if the commit metadata contains reviewers in a `Reviewed-By: Foo Bar <baz@boom>` format.
-* `changes`: if `--stat` data is included in the git log, an object containing change stats:
+- `authors`: a list of such objects representing the authors of the commit, supporting multiple authors through `Co-authored-by:`
+- `authorDate`: a string representing the date of the original commit by the author (never change)
+- `commitDate`: a string representing the date of the last change of the commit
+- `summary`: the one-line summary of the commit
+- `description`: the free-form text content of the summary, minus specific metadata lines
+- `reviewers`: an array containing objects with `name` and `email` properties if the commit metadata contains reviewers in a `Reviewed-By: Foo Bar <baz@boom>` format.
+- `changes`: if `--stat` data is included in the git log, an object containing change stats:
   - `files`: the number of files changed
   - `insertions`: the number of new lines inserted
   - `deletions`: the number of old lines removed
-* `prUrl`: a URL pointing to a pull-request where this change was made if the commit metadata contains a `PR-URL: https://github.com/user/project/pull/XX` line. Note that whatever proceeds the `PR-URL: ` string will be collected in this property; one exception being that if a shortened `#XX` version is found and you have supplied `defaultGitHubUser` and `defaultGitHubProject` arguments to the constructor then a full GitHub pull-request will be reconstituted in its place.
-* `ghUser`, `ghProject, `ghIssue`: if a proper GitHub pull request is found for the `prUrl` property (including shortened `#XX` ones), these properties will be added to point to the original user, project and issue (pull-request) for this change, as extracted from the URL.
+- `prUrl`: a URL pointing to a pull-request where this change was made if the commit metadata contains a `PR-URL: https://github.com/user/project/pull/XX` line. Note that whatever proceeds the `PR-URL: ` string will be collected in this property; one exception being that if a shortened `#XX` version is found and you have supplied `defaultGitHubUser` and `defaultGitHubProject` arguments to the constructor then a full GitHub pull-request will be reconstituted in its place.
+- `ghUser`, `ghProject`, `ghIssue`: if a proper GitHub pull request is found for the `prUrl` property (including shortened `#XX` ones), these properties will be added to point to the original user, project and issue (pull-request) for this change, as extracted from the URL.
 
 ## License
 

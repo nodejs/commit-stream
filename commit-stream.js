@@ -1,75 +1,91 @@
-const through2  = require('through2')
-    , stripAnsi = require('strip-ansi')
+import through2 from 'through2'
+import stripAnsi from 'strip-ansi'
 
-
-module.exports = commitStream
-
-
-function commitStream (ghUser, ghProject) {
-  var commit
+export default function commitStream (ghUser, ghProject) {
+  let commit
 
   return through2.obj(onLine, onEnd)
 
   function addLine (line) {
     line = stripAnsi(line)
 
-    if (!line)
-      return
+    if (line.length === 0) return
 
-    var old, m
+    let old, m
 
     if (/^commit \w+$/.test(line)) {
       old = commit
-      commit = {
-        sha: line.split(' ')[1]
+      commit = { sha: line.split(' ')[1] }
+    } else if ((m = line.match(/^CommitDate:\s+(.*)$/)) !== null) {
+      if (commit === undefined || commit === null) {
+        throw new Error('Something unexpected occurred')
       }
-    } else if (m = line.match(/^CommitDate:\s+(.*)$/)) {
-      if (!commit)
-        throw new Error('wut?')
       commit.commitDate = m[1].trim()
-    } else if (m = line.match(/^\s*(?:Author|Co[- ]?authored[- ]?by):?\s*([^<]+) <([^>]+)>\s*$/i)) {
-      if (!commit)
-        throw new Error('wut?')
-      if (!commit.authors)
-        commit.authors = []
-      commit.authors.push({ name: m[1], email: m[2] })
-    } else if (m = line.match(/^AuthorDate:\s+(.*)$/)) {
-      if (!commit)
-        throw new Error('wut?')
-      commit.authorDate = m[1].trim()
-    } else if (m = line.match(/^Date:\s+(.*)$/)) {
-      if (!commit)
-        throw new Error('wut?')
-      commit.authorDate = m[1].trim()
-    } else if (m = line.match(/^\s+Reviewed[- ]?By:?\s*([^<]+) <([^>]+)>\s*$/i)) {
-      if (!commit.reviewers)
-        commit.reviewers = []
-      commit.reviewers.push({ name: m[1], email: m[2] })
-    } else if (m = line.match(/^\s+PR(?:[- ]?URL)?:?\s*(.+)\s*$/)) {
-      commit.prUrl = m[1]
-      if (ghUser && ghProject && (m = commit.prUrl.match(/^\s*#?(\d+)\s*$/))) {
-        commit.prUrl = 'https://github.com/' + ghUser + '/' + ghProject + '/pull/' + m[1]
+    } else if (
+      (m = line.match(
+        /^\s*(?:Author|Co[- ]?authored[- ]?by):?\s*([^<]+) <([^>]+)>\s*$/i
+      )) !== null
+    ) {
+      if (commit === undefined || commit === null) {
+        throw new Error('Something unexpected occurred')
       }
-      if (m = commit.prUrl.match(/^(https?:\/\/.+\/([^\/]+)\/([^\/]+))\/\w+\/(\d+)(\/)?$/i)) {
-        commit.ghIssue   = +m[4]
-        commit.ghUser    = m[2]
+      if (commit.authors === undefined || commit.authors === null) {
+        commit.authors = []
+      }
+      commit.authors.push({ name: m[1], email: m[2] })
+    } else if ((m = line.match(/^(?:AuthorDate|Date):\s+(.*)$/)) !== null) {
+      if (commit === undefined || commit === null) {
+        throw new Error('Something unexpected occurred')
+      }
+      commit.authorDate = m[1].trim()
+    } else if (
+      (m = line.match(/^\s+Reviewed[- ]?By:?\s*([^<]+) <([^>]+)>\s*$/i)) !==
+      null
+    ) {
+      if (commit.reviewers === undefined || commit.reviewers === null) {
+        commit.reviewers = []
+      }
+      commit.reviewers.push({ name: m[1], email: m[2] })
+    } else if ((m = line.match(/^\s+PR(?:[- ]?URL)?:?\s*(.+)\s*$/)) !== null) {
+      commit.prUrl = m[1]
+      if (
+        typeof ghUser === 'string' &&
+        ghUser.length !== 0 &&
+        typeof ghProject === 'string' &&
+        ghProject.length !== 0 &&
+        (m = commit.prUrl.match(/^\s*#?(\d+)\s*$/)) !== null
+      ) {
+        commit.prUrl = `https://github.com/${ghUser}/${ghProject}/pull/${m[1]}`
+      }
+      if (
+        (m = commit.prUrl.match(
+          /^(https?:\/\/.+\/([^/]+)\/([^/]+))\/\w+\/(\d+)(\/)?$/i
+        )) !== null
+      ) {
+        commit.ghIssue = parseInt(m[4])
+        commit.ghUser = m[2]
         commit.ghProject = m[3]
       }
-    } else if (/^    /.test(line) && (line = line.trim()).length) {
-      if (!commit.summary) {
+    } else if (/^ {4}/.test(line) && (line = line.trim()).length !== 0) {
+      if (commit.summary === undefined || commit.summary === null) {
         commit.summary = line
       } else {
-        if (!commit.description)
+        if (commit.description === undefined || commit.description === null) {
           commit.description = []
+        }
         commit.description.push(line)
       }
-    } else if (/^ [^ ]/.test(line) && (line = line.trim()).length) {
-      if (m = line.match(/^(\d+) files? changed(?:, (\d+) insertions?\(\+\))?(?:, (\d+) deletions?\(-\))?/)) {
-        commit.changes = {
-            files      : Number(m[1])
-          , insertions : Number(m[2] || 0)
-          , deletions  : Number(m[3] || 0)
-        }
+    } else if (
+      /^ [^ ]/.test(line) &&
+      (line = line.trim()).length !== 0 &&
+      (m = line.match(
+        /^(\d+) files? changed(?:, (\d+) insertions?\(\+\))?(?:, (\d+) deletions?\(-\))?/
+      )) !== null
+    ) {
+      commit.changes = {
+        files: parseInt(m[1]),
+        insertions: parseInt(m[2] ?? 0),
+        deletions: parseInt(m[3] ?? 0)
       }
     }
 
@@ -77,19 +93,24 @@ function commitStream (ghUser, ghProject) {
   }
 
   function onLine (line, _, callback) {
-    var commit = addLine(line)
-    if (commit && commit.authors && commit.authors.length > 0)
+    const commit = addLine(line)
+
+    if (commit?.authors?.length > 0) {
       commit.author = commit.authors[0]
-    if (commit)
+
       this.push(commit)
+    }
+
     callback()
   }
 
   function onEnd (callback) {
-    if (commit && commit.authors && commit.authors.length > 0)
+    if (commit?.authors?.length > 0) {
       commit.author = commit.authors[0]
-    if (commit)
+
       this.push(commit)
+    }
+
     callback()
   }
 }
