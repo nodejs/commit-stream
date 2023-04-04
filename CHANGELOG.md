@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/rvagg/commit-stream/compare/v2.0.0...v2.0.1) (2023-04-04)
+
+
+### Trivial Changes
+
+* **deps:** bump actions/setup-node from 3.5.1 to 3.6.0 ([d4c0cac](https://github.com/rvagg/commit-stream/commit/d4c0cacb25482c5e16523fab70ec90b30fde42d9))
+
 ## [2.0.0](https://github.com/rvagg/commit-stream/compare/v1.0.2...v2.0.0) (2023-04-04)
 
 
