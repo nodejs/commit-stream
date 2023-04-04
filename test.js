@@ -3,13 +3,17 @@ import { spawn, exec } from 'node:child_process'
 import test from 'tape'
 import split2 from 'split2'
 import listStream from 'list-stream'
+import { pipeline } from 'readable-stream'
 
 function gitToList (gitCmd, callback) {
   const child = spawn('bash', ['-c', gitCmd])
-  child.stdout
-    .pipe(split2())
-    .pipe(commitStream())
-    .pipe(listStream.obj(callback))
+  pipeline(
+    child.stdout,
+    split2(),
+    commitStream(),
+    listStream.obj(callback),
+    () => {}
+  )
 }
 
 test('git is runnable', (t) => {
