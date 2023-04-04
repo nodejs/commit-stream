@@ -4,9 +4,20 @@ import test from 'tape'
 import split2 from 'split2'
 import listStream from 'list-stream'
 import { pipeline } from 'readable-stream'
+import bl from 'bl'
 
-function gitToList (gitCmd, callback) {
+function gitToList (t, gitCmd, callback) {
   const child = spawn('bash', ['-c', gitCmd])
+  child.stderr.pipe(bl((_, out) => {
+    t.strictEqual(out.toString(), '')
+  }))
+  child.on('error', (err) => {
+    t.error(err, 'error from child')
+  })
+  child.on('close', (code) => {
+    t.strictEqual(code, 0, 'exit code zero')
+    setImmediate(t.end.bind(t))
+  })
   pipeline(
     child.stdout,
     split2(),
@@ -30,10 +41,13 @@ test('git is runnable', (t) => {
 })
 
 test('current plain commit log', (t) => {
-  gitToList('git log', (err, list) => {
+  gitToList(t, 'git log', (err, list) => {
     t.error(err, 'no error')
 
-    t.ok(list?.length > 1, 'got a list')
+    t.ok(list?.length > 0, 'got a list')
+    if (!list || !list.length) {
+      return
+    }
 
     t.deepEqual(
       list[list.length - 9],
@@ -119,7 +133,7 @@ test('current plain commit log', (t) => {
     t.deepEqual(
       list[list.length - 16],
       {
-        sha: list[list.length - 16].sha, // unknown at time of writing :)
+        sha: list[list.length - 16]?.sha, // unknown at time of writing :)
         authorDate: 'Tue Jun 12 23:41:35 2018 +0200',
         author: { name: 'Anna Henningsen', email: 'anna@addaleax.net' },
         authors: [
@@ -130,19 +144,20 @@ test('current plain commit log', (t) => {
       },
       'got correct co-authored-by commit'
     )
-
-    t.end()
   })
 })
 
 test('current commit log with changes', (t) => {
-  gitToList('git log --stat', (err, list) => {
+  gitToList(t, 'git log --stat', (err, list) => {
     t.error(err, 'no errors')
 
     t.ok(list?.length > 0, 'got a list')
+    if (!list || !list.length) {
+      return
+    }
 
     t.deepEqual(
-      list[list.length - 4].changes,
+      list[list.length - 4]?.changes,
       {
         files: 1,
         insertions: 0,
@@ -152,7 +167,7 @@ test('current commit log with changes', (t) => {
     )
 
     t.deepEqual(
-      list[list.length - 3].changes,
+      list[list.length - 3]?.changes,
       {
         files: 1,
         insertions: 1,
@@ -162,7 +177,7 @@ test('current commit log with changes', (t) => {
     )
 
     t.deepEqual(
-      list[list.length - 2].changes,
+      list[list.length - 2]?.changes,
       {
         files: 1,
         insertions: 49,
@@ -172,7 +187,7 @@ test('current commit log with changes', (t) => {
     )
 
     t.deepEqual(
-      list[list.length - 1].changes,
+      list[list.length - 1]?.changes,
       {
         files: 1,
         insertions: 28,
@@ -180,7 +195,5 @@ test('current commit log with changes', (t) => {
       },
       'got correct first commit changes'
     )
-
-    t.end()
   })
 })
