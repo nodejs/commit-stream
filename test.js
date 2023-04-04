@@ -1,6 +1,7 @@
 const through2     = require('through2')
     , commitStream = require('./')
     , spawn        = require('child_process').spawn
+    , exec         = require('child_process').exec
     , test         = require('tape')
     , split2       = require('split2')
     , listStream   = require('list-stream')
@@ -10,6 +11,19 @@ function gitToList (gitCmd, callback) {
   var child = spawn('bash', [ '-c', gitCmd ])
   child.stdout.pipe(split2()).pipe(commitStream()).pipe(listStream.obj(callback))
 }
+
+test('git is runnable', function (t) {
+  exec('git version', (error, stdout, stderr) => {
+    if (error) {
+      t.fail(`command failed: ${error}`)
+    } else if (stderr) {
+      t.fail(`command output to stderr: ${stderr}`)
+    } else {
+      t.match(stdout, /^git version 2/)
+    }
+    t.end()
+  })
+})
 
 
 test('current plain commit log', function (t) {
