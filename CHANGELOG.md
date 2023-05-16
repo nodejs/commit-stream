@@ -1,3 +1,10 @@
+## [2.1.0](https://github.com/rvagg/commit-stream/compare/v2.0.1...v2.1.0) (2023-05-16)
+
+
+### Features
+
+* add support for green-button merges ([9e87160](https://github.com/rvagg/commit-stream/commit/9e87160f261d67ea0a3a6c4a02136b5c50ecfa42))
+
 ## [2.0.1](https://github.com/rvagg/commit-stream/compare/v2.0.0...v2.0.1) (2023-04-04)
 
 
