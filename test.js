@@ -231,19 +231,15 @@ test('cve id', function (t) {
 
     t.ok(list && list.length > 1, 'got a list')
 
-    t.deepEqual(list[list.length - 18], {
-      sha: 'b23208796d7e3fd08b36f6106aa7f027aa827137',
+    t.deepEqual(list[list.length - 30], {
+      sha: 'de55c4c81dfb6cf13e5e2ae24ae88c9be4f5b598',
       authors: [
-        { name: 'Rich Trott', email: 'rtrott@gmail.com' }
+        { name: 'RafaelGSS', email: 'rafael.nunu@hotmail.com' }
       ],
-      authorDate: 'Mon Oct 11 19:29:18 2021 -0700',
-      prUrl: 'https://github.com/rvagg/commit-stream/pull/5',
-      ghIssue: 5,
-      ghUser: 'rvagg',
-      ghProject: 'commit-stream',
-      author: { name: 'Rich Trott', email: 'rtrott@gmail.com' },
-      summary: 'chore: update strip-ansi to 6.x',
-      cveId: ''
+      authorDate: 'Fri Nov 22 00:19:29 2024 -0300',
+      author: { name: 'RafaelGSS', email: 'rafael.nunu@hotmail.com' },
+      summary: 'feat: add cveId support',
+      cveId: 'CVE-2024-12345'
     }, 'got correct pr url for green-button merge')
   })
 })
