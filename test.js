@@ -224,3 +224,26 @@ test('current commit log with ghUser and ghRepo passed', function (t) {
     }, 'got correct pr url for green-button merge')
   })
 })
+
+test('cve id', function (t) {
+  gitToList(t, 'git log', 'rvagg', 'commit-stream', function (err, list) {
+    t.error(err, 'no error')
+
+    t.ok(list && list.length > 1, 'got a list')
+
+    t.deepEqual(list[list.length - 18], {
+      sha: 'b23208796d7e3fd08b36f6106aa7f027aa827137',
+      authors: [
+        { name: 'Rich Trott', email: 'rtrott@gmail.com' }
+      ],
+      authorDate: 'Mon Oct 11 19:29:18 2021 -0700',
+      prUrl: 'https://github.com/rvagg/commit-stream/pull/5',
+      ghIssue: 5,
+      ghUser: 'rvagg',
+      ghProject: 'commit-stream',
+      author: { name: 'Rich Trott', email: 'rtrott@gmail.com' },
+      summary: 'chore: update strip-ansi to 6.x',
+      cveId: ''
+    }, 'got correct pr url for green-button merge')
+  })
+})
