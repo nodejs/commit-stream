@@ -232,7 +232,7 @@ test('cve id', function (t) {
     t.ok(list && list.length > 1, 'got a list')
 
     t.deepEqual(list[list.length - 30], {
-      sha: 'de55c4c81dfb6cf13e5e2ae24ae88c9be4f5b598',
+      sha: '6c82ccd24e44167433126ba2bf4e95c8c4f41297',
       authors: [
         { name: 'RafaelGSS', email: 'rafael.nunu@hotmail.com' }
       ],
