@@ -1,5 +1,7 @@
 name: Test & Maybe Release
+
 on: [push, pull_request]
+
 jobs:
   test:
     strategy:
@@ -26,6 +28,8 @@ jobs:
           npm run test:ci
   release:
     name: Release
+    permissions:
+      contents: write
     needs: test
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
