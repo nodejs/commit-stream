@@ -1,3 +1,18 @@
+## [2.2.0](https://github.com/nodejs/commit-stream/compare/v2.1.0...v2.2.0) (2024-11-27)
+
+### Features
+
+* add cveId support ([6c82ccd](https://github.com/nodejs/commit-stream/commit/6c82ccd24e44167433126ba2bf4e95c8c4f41297))
+
+### Bug Fixes
+
+* add permissions: write to create release action ([776bc30](https://github.com/nodejs/commit-stream/commit/776bc302aebaef471870b56586572225325af238))
+
+### Tests
+
+* add CVE-ID test ([0748578](https://github.com/nodejs/commit-stream/commit/0748578e475534d96be8e4b9f306f5d84c7e383a))
+* fix sha cve id pr ([670b4ab](https://github.com/nodejs/commit-stream/commit/670b4abd056ca4099e8dcb02d31504a857db991c))
+
 ## [2.1.0](https://github.com/rvagg/commit-stream/compare/v2.0.1...v2.1.0) (2023-05-16)
 
 
