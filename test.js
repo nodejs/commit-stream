@@ -1,10 +1,19 @@
 import commitStream from './commit-stream.js'
 import { spawn, exec } from 'node:child_process'
-import test from 'tape'
+import assert from 'node:assert/strict'
+import nodeTest from 'node:test'
 import split2 from 'split2'
 import listStream from 'list-stream'
 import { pipeline } from 'readable-stream'
 import bl from 'bl'
+
+function test (name, fn) {
+  return nodeTest(name, (_, done) => fn({
+    ...assert,
+    end: done,
+    error: assert.ifError
+  }))
+}
 
 function gitToList (t, gitCmd, user, repo, callback) {
   if (typeof user === 'function') {
