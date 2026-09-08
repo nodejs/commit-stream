@@ -1,5 +1,5 @@
 import through2 from 'through2'
-import stripAnsi from 'strip-ansi'
+import { stripVTControlCharacters } from 'node:util'
 
 export default function commitStream (ghUser, ghProject) {
   let commit
@@ -7,7 +7,7 @@ export default function commitStream (ghUser, ghProject) {
   return through2.obj(onLine, onEnd)
 
   function addLine (line) {
-    line = stripAnsi(line)
+    line = stripVTControlCharacters(line)
 
     if (line.length === 0) return
 
