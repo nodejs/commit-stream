@@ -252,3 +252,27 @@ test('cve id', function (t) {
     }, 'got correct pr url for green-button merge')
   })
 })
+
+test('cve id with 4 or more sequence digits', function (t) {
+  const log = (cveId) => [
+    'commit 0000000000000000000000000000000000000000',
+    'Author: RafaelGSS <rafael.nunu@hotmail.com>',
+    'Date:   Fri Nov 22 00:19:29 2024 -0300',
+    '',
+    '    deps: fix vulnerability',
+    '',
+    `    CVE-ID: ${cveId}`
+  ]
+  const ids = ['CVE-2026-9358', 'CVE-2024-12345', 'CVE-2017-1000117']
+  const stream = commitStream()
+  const commits = []
+  stream.on('data', (commit) => commits.push(commit))
+  stream.on('end', () => {
+    t.deepEqual(commits.map((c) => c.cveId), ids)
+    t.end()
+  })
+  for (const id of ids) {
+    for (const line of log(id)) stream.write(line)
+  }
+  stream.end()
+})
