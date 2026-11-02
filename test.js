@@ -233,3 +233,17 @@ test('cve id with 4 or more sequence digits', async () => {
   const commits = await toCommits(ids.flatMap(log))
   assert.deepStrictEqual(commits.map((c) => c.cveId), ids)
 })
+
+test('line before first commit header rejects pipeline', async () => {
+  await assert.rejects(toCommits(['garbage']), {
+    message: 'Unexpected line before first "commit" header: garbage'
+  })
+})
+
+test('line before first commit header emits error on write', async () => {
+  const stream = commitStream()
+  const error = once(stream, 'error')
+  stream.write('garbage')
+  const [err] = await error
+  assert.strictEqual(err.message, 'Unexpected line before first "commit" header: garbage')
+})
