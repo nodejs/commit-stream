@@ -3,11 +3,21 @@
   "version": "2.2.7",
   "description": "Turn a `git log` into a stream of commit objects",
   "main": "commit-stream.js",
+  "types": "types/commit-stream.d.ts",
+  "exports": {
+    ".": {
+      "types": "./types/commit-stream.d.ts",
+      "default": "./commit-stream.js"
+    }
+  },
   "type": "module",
   "scripts": {
-    "build": "true",
-    "test:ci": "npm run test",
-    "test": "node --test test.js"
+    "lint": "standard",
+    "build": "npm run build:types",
+    "build:types": "tsc --build",
+    "prepublishOnly": "npm run build",
+    "test:unit": "node --test test.js",
+    "test": "npm run lint && npm run test:unit"
   },
   "repository": {
     "type": "git",
@@ -21,10 +31,12 @@
   "homepage": "https://github.com/nodejs/commit-stream",
   "devDependencies": {
     "@semantic-release/changelog": "^7.0.0",
-    "@semantic-release/git": "^11.0.0",
+    "@semantic-release/git": "^11.0.1",
+    "@types/node": "^24.19.2",
     "conventional-changelog-conventionalcommits": "^9.3.1",
-    "list-stream": "^2.1.0",
-    "semantic-release": "^25.0.3"
+    "semantic-release": "^25.0.9",
+    "standard": "^17.1.2",
+    "typescript": "^7.0.2"
   },
   "release": {
     "branches": [

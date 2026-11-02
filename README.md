@@ -2,14 +2,13 @@
 
 **Turn a `git log` into a stream of commit objects**
 
-[![npm](https://nodei.co/npm/commit-stream.png?downloads=true&downloadRank=true)](https://nodei.co/npm/commit-stream/)
-[![npm](https://nodei.co/npm-dl/commit-stream.png?months=6&height=3)](https://nodei.co/npm/commit-stream/)
+[![NPM](https://nodei.co/npm/commit-stream.svg?style=flat&data=n,v&color=blue)](https://nodei.co/npm/commit-stream/)
 
 ## API
 
 **`commitStream([defaultGithubUser, defaultGithubProject])`**
 
-Returns an object stream that you can pipe a stream of newlines from the output of `git log` to. The output of the stream is a series of objects, each representing a commit from the log.`
+Returns an object stream that you can pipe a stream of newlines from the output of `git log` to. The output of the stream is a series of objects, each representing a commit from the log.
 
 Intended to be used on a standard log format (not a simplified one using one of the simplifying `--format` options) but it will also process change stats if you `git log --stat`.
 
@@ -18,18 +17,20 @@ Typical usage:
 ```js
 import { spawn } from 'node:child_process'
 import { createInterface } from 'node:readline'
-import { Readable } from 'node:stream'
-import listStream from 'list-stream'
+import { pipeline } from 'node:stream/promises'
+import commitStream from 'commit-stream'
 
-const { stdout } = spawn('bash', ['-c', 'git log'])
+const { stdout } = spawn('git', ['log'])
+const commits = []
 
-Readable.from(createInterface({ input: stdout, crlfDelay: Infinity })) // break up by newline characters
-  .pipe(commitStream('rvagg', 'commit-stream'))
-  .pipe(listStream.obj(onCommitList))
-
-function onCommitList (err, list) {
-  // list is an array of objects
-}
+await pipeline(
+  createInterface({ input: stdout, crlfDelay: Infinity }), // break up by newline characters
+  commitStream('rvagg', 'commit-stream'),
+  async (source) => {
+    for await (const commit of source) commits.push(commit)
+  }
+)
+// commits is an array of objects
 ```
 
 Commit object properties:
