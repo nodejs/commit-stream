@@ -25,10 +25,12 @@ jobs:
       - name: Install Dependencies
         run: |
           npm install --no-progress
-      - name: Run tests
+      - name: Check build is up to date
         run: |
-          npm config set script-shell bash
-          npm run test:ci
+          npm run build
+          git diff --exit-code || (echo "::error::Build artifacts not committed. Run 'npm run build' and commit the changes." && exit 1)
+      - name: Run tests
+        run: npm test
   release:
     name: Release
     permissions:
