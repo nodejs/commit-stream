@@ -1,3 +1,18 @@
+## [2.2.1](https://github.com/nodejs/commit-stream/compare/v2.2.0...v2.2.1) (2026-11-02)
+
+### Bug Fixes
+
+* accept CVE IDs with 4 or more sequence digits ([0888618](https://github.com/nodejs/commit-stream/commit/088861884642d6019d5174a39d536b5d57479cae))
+
+### Tests
+
+* migrate from tape to node test runner ([#24](https://github.com/nodejs/commit-stream/issues/24)) ([e851881](https://github.com/nodejs/commit-stream/commit/e85188170ae20deea426a4843b9807147c1dd373))
+
+### Trivial Changes
+
+* **ci:** setup oidc releases, update dependabot config ([#27](https://github.com/nodejs/commit-stream/issues/27)) ([c5b5780](https://github.com/nodejs/commit-stream/commit/c5b578013335ea18bf8582249f9bd0497c66b2f4))
+* downgrade broken changelog maker ([#22](https://github.com/nodejs/commit-stream/issues/22)) ([09a279b](https://github.com/nodejs/commit-stream/commit/09a279b94c163400a735e2f909aa7c731caafee2))
+
 ## [2.2.0](https://github.com/nodejs/commit-stream/compare/v2.1.0...v2.2.0) (2024-11-27)
 
 ### Features
