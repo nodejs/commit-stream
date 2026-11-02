@@ -1,3 +1,9 @@
+## [2.2.7](https://github.com/nodejs/commit-stream/compare/v2.2.6...v2.2.7) (2026-11-02)
+
+### Trivial Changes
+
+* remove split2 ([#36](https://github.com/nodejs/commit-stream/issues/36)) ([d67bff9](https://github.com/nodejs/commit-stream/commit/d67bff9c8c520db7d8a76d7e729239f12a1f57c0))
+
 ## [2.2.6](https://github.com/nodejs/commit-stream/compare/v2.2.5...v2.2.6) (2026-11-02)
 
 ### Trivial Changes
