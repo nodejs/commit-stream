@@ -1,3 +1,9 @@
+## [3.0.1](https://github.com/nodejs/commit-stream/compare/v3.0.0...v3.0.1) (2026-11-02)
+
+### Bug Fixes
+
+* pass parse errors to transform callback instead of throwing ([#38](https://github.com/nodejs/commit-stream/issues/38)) ([f0d2a32](https://github.com/nodejs/commit-stream/commit/f0d2a329101ce1134a85208d4ee5c8c13ed68ffc))
+
 ## [3.0.0](https://github.com/nodejs/commit-stream/compare/v2.2.7...v3.0.0) (2026-11-02)
 
 ### ⚠ BREAKING CHANGES
