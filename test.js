@@ -4,7 +4,7 @@ import assert from 'node:assert/strict'
 import nodeTest from 'node:test'
 import split2 from 'split2'
 import listStream from 'list-stream'
-import { pipeline } from 'readable-stream'
+import { pipeline } from 'node:stream'
 
 function test (name, fn) {
   return nodeTest(name, (_, done) => fn({
