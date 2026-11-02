@@ -1,3 +1,9 @@
+## [2.2.4](https://github.com/nodejs/commit-stream/compare/v2.2.3...v2.2.4) (2026-11-02)
+
+### Trivial Changes
+
+* **ci:** drop old Node.js release lines ([#32](https://github.com/nodejs/commit-stream/issues/32)) ([c7cb219](https://github.com/nodejs/commit-stream/commit/c7cb21921ffd583312552ee40951224af2e57c91))
+
 ## [2.2.3](https://github.com/nodejs/commit-stream/compare/v2.2.2...v2.2.3) (2026-11-02)
 
 ### Trivial Changes
