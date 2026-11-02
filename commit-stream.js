@@ -46,12 +46,14 @@ export default function commitStream (ghUser, ghProject) {
   return new Transform({
     objectMode: true,
     transform (line, _, callback) {
+      let done
       try {
-        emit(this, addLine(line))
-        callback()
+        done = addLine(line)
       } catch (err) {
-        callback(/** @type {Error} */ (err))
+        return callback(/** @type {Error} */ (err))
       }
+      emit(this, done)
+      callback()
     },
     flush (callback) {
       emit(this, commit)
