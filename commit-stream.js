@@ -46,7 +46,13 @@ export default function commitStream (ghUser, ghProject) {
   return new Transform({
     objectMode: true,
     transform (line, _, callback) {
-      emit(this, addLine(line))
+      let done
+      try {
+        done = addLine(line)
+      } catch (err) {
+        return callback(/** @type {Error} */ (err))
+      }
+      emit(this, done)
       callback()
     },
     flush (callback) {
@@ -73,7 +79,7 @@ export default function commitStream (ghUser, ghProject) {
     let m
 
     if (!commit) {
-      throw new Error('Something unexpected occurred')
+      throw new Error(`Unexpected line before first "commit" header: ${line}`)
     }
 
     if ((m = line.match(/^CommitDate:\s+(.*)$/)) !== null) {
