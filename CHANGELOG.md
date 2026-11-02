@@ -1,3 +1,9 @@
+## [2.2.3](https://github.com/nodejs/commit-stream/compare/v2.2.2...v2.2.3) (2026-11-02)
+
+### Trivial Changes
+
+* **deps:** remove through2 and bl ([#31](https://github.com/nodejs/commit-stream/issues/31)) ([6b16a9e](https://github.com/nodejs/commit-stream/commit/6b16a9e3bf4eee0d21edcef4b489d245b949f991))
+
 ## [2.2.2](https://github.com/nodejs/commit-stream/compare/v2.2.1...v2.2.2) (2026-11-02)
 
 ### Trivial Changes
