@@ -2,9 +2,9 @@ import commitStream from './commit-stream.js'
 import { spawn, exec } from 'node:child_process'
 import assert from 'node:assert/strict'
 import nodeTest from 'node:test'
-import split2 from 'split2'
+import { createInterface } from 'node:readline'
 import listStream from 'list-stream'
-import { pipeline } from 'node:stream'
+import { pipeline, Readable } from 'node:stream'
 
 function test (name, fn) {
   return nodeTest(name, (_, done) => fn({
@@ -21,6 +21,10 @@ function gitToList (t, gitCmd, user, repo, callback) {
     repo = undefined
   }
   const child = spawn('bash', ['-c', gitCmd])
+  let pending = 2
+  const done = () => {
+    if (--pending === 0) setImmediate(t.end.bind(t))
+  }
   let stderr = ''
   child.stderr.setEncoding('utf8').on('data', (chunk) => { stderr += chunk })
   child.on('error', (err) => {
@@ -29,13 +33,15 @@ function gitToList (t, gitCmd, user, repo, callback) {
   child.on('close', (code) => {
     t.strictEqual(stderr, '')
     t.strictEqual(code, 0, 'exit code zero')
-    setImmediate(t.end.bind(t))
+    done()
   })
   pipeline(
-    child.stdout,
-    split2(),
+    Readable.from(createInterface({ input: child.stdout, crlfDelay: Infinity })),
     commitStream(user, repo),
-    listStream.obj(callback),
+    listStream.obj((err, list) => {
+      callback(err, list)
+      done()
+    }),
     () => {}
   )
 }

@@ -17,11 +17,13 @@ Typical usage:
 
 ```js
 import { spawn } from 'node:child_process'
-import split2 from 'split2'
+import { createInterface } from 'node:readline'
+import { Readable } from 'node:stream'
 import listStream from 'list-stream'
 
-spawn('bash', ['-c', 'git log'])
-  .stdout.pipe(split2()) // break up by newline characters
+const { stdout } = spawn('bash', ['-c', 'git log'])
+
+Readable.from(createInterface({ input: stdout, crlfDelay: Infinity })) // break up by newline characters
   .pipe(commitStream('rvagg', 'commit-stream'))
   .pipe(listStream.obj(onCommitList))
 
