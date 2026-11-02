@@ -247,3 +247,57 @@ test('line before first commit header emits error on write', async () => {
   const [err] = await error
   assert.strictEqual(err.message, 'Unexpected line before first "commit" header: garbage')
 })
+
+for (const decoration of ['(HEAD -> main)', '(tag: v1.0.0, origin/main)', '(from 1111111111111111111111111111111111111111)']) {
+  test(`decorated commit header ${decoration}`, async () => {
+    // first header plain, second decorated: exercises the "merged into previous commit" path
+    const log = (sha, name, summary, header = `commit ${sha} ${decoration}`) => [
+      header,
+      `Author: ${name} <${name}@example.com>`,
+      'Date:   Fri Nov 22 00:19:29 2024 -0300',
+      '',
+      `    ${summary}`,
+      ''
+    ]
+    const commits = await toCommits([
+      ...log('2222222222222222222222222222222222222222', 'first', 'first summary', 'commit 2222222222222222222222222222222222222222'),
+      ...log('3333333333333333333333333333333333333333', 'second', 'second summary')
+    ])
+    assert.deepStrictEqual(commits, [
+      {
+        sha: '2222222222222222222222222222222222222222',
+        author: { name: 'first', email: 'first@example.com' },
+        authors: [{ name: 'first', email: 'first@example.com' }],
+        authorDate: 'Fri Nov 22 00:19:29 2024 -0300',
+        summary: 'first summary'
+      },
+      {
+        sha: '3333333333333333333333333333333333333333',
+        author: { name: 'second', email: 'second@example.com' },
+        authors: [{ name: 'second', email: 'second@example.com' }],
+        authorDate: 'Fri Nov 22 00:19:29 2024 -0300',
+        summary: 'second summary'
+      }
+    ])
+  })
+}
+
+for (const args of [['--decorate=short'], ['--decorate=short', '--color=always'], ['-c', 'log.decorate=short']]) {
+  test(`git log ${args.join(' ')} matches undecorated log`, async () => {
+    const gitArgs = args[0] === '-c' ? [...args, 'log'] : ['log', ...args]
+    assert.deepStrictEqual(await gitToList(gitArgs), await gitToList(['log', '--no-decorate']))
+  })
+}
+
+test('git log -m parses "(from <sha>)" merge headers', async () => {
+  const list = await gitToList(['log', '-m', '--stat', '--no-decorate', '8d59e56..1a19a1d'])
+  assert.deepStrictEqual(
+    list.map((c) => [c.sha, c.authors?.length, c.summary]),
+    [
+      ['1a19a1da92a1657592b52d94d24678c5c5659883', 1, 'Merge pull request #19 from nodejs/add-write-permission'],
+      ['776bc302aebaef471870b56586572225325af238', 1, 'fix: add permissions: write to create release action'],
+      ['6d8cfef1f2f8618bc363ac73dae3e4075127ab4d', 1, 'Merge pull request #18 from nodejs/change-repository-to-nodejs'],
+      ['1c30cfb55cc0d280c71eec1c1462e067b3214113', 1, 'meta: change repository to nodejs']
+    ]
+  )
+})

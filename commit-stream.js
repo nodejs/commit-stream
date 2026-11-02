@@ -70,13 +70,13 @@ export default function commitStream (ghUser, ghProject) {
 
     if (line.length === 0) return
 
-    if (/^commit \w+$/.test(line)) {
+    let m
+
+    if ((m = line.match(/^commit (\w+)/)) !== null) {
       const old = commit
-      commit = { sha: line.split(' ')[1] }
+      commit = { sha: m[1] }
       return old
     }
-
-    let m
 
     if (!commit) {
       throw new Error(`Unexpected line before first "commit" header: ${line}`)
