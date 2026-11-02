@@ -1,10 +1,10 @@
-import through2 from 'through2'
+import { Transform } from 'node:stream'
 import { stripVTControlCharacters } from 'node:util'
 
 export default function commitStream (ghUser, ghProject) {
   let commit
 
-  return through2.obj(onLine, onEnd)
+  return new Transform({ objectMode: true, transform: onLine, flush: onEnd })
 
   function addLine (line) {
     line = stripVTControlCharacters(line)
