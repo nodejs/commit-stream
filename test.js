@@ -5,7 +5,6 @@ import nodeTest from 'node:test'
 import split2 from 'split2'
 import listStream from 'list-stream'
 import { pipeline } from 'readable-stream'
-import bl from 'bl'
 
 function test (name, fn) {
   return nodeTest(name, (_, done) => fn({
@@ -22,13 +21,13 @@ function gitToList (t, gitCmd, user, repo, callback) {
     repo = undefined
   }
   const child = spawn('bash', ['-c', gitCmd])
-  child.stderr.pipe(bl((_, out) => {
-    t.strictEqual(out.toString(), '')
-  }))
+  let stderr = ''
+  child.stderr.setEncoding('utf8').on('data', (chunk) => { stderr += chunk })
   child.on('error', (err) => {
     t.error(err, 'error from child')
   })
   child.on('close', (code) => {
+    t.strictEqual(stderr, '')
     t.strictEqual(code, 0, 'exit code zero')
     setImmediate(t.end.bind(t))
   })
