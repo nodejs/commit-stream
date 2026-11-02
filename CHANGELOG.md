@@ -1,3 +1,13 @@
+## [3.0.0](https://github.com/nodejs/commit-stream/compare/v2.2.7...v3.0.0) (2026-11-02)
+
+### ⚠ BREAKING CHANGES
+
+* package exports restrict imports to the package root
+
+### Features
+
+* add types and exports; modernise tests ([#37](https://github.com/nodejs/commit-stream/issues/37)) ([0ab5289](https://github.com/nodejs/commit-stream/commit/0ab5289388059ad6ab4f5a535b7d823ae84ae2a0))
+
 ## [2.2.7](https://github.com/nodejs/commit-stream/compare/v2.2.6...v2.2.7) (2026-11-02)
 
 ### Trivial Changes
