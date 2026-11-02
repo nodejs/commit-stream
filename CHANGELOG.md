@@ -1,3 +1,9 @@
+## [2.2.2](https://github.com/nodejs/commit-stream/compare/v2.2.1...v2.2.2) (2026-11-02)
+
+### Trivial Changes
+
+* replace strip-ansi with util.stripVTControlCharacters ([#25](https://github.com/nodejs/commit-stream/issues/25)) ([629f38c](https://github.com/nodejs/commit-stream/commit/629f38c439a9c9f72a22ba7842464dbfa98c640a))
+
 ## [2.2.1](https://github.com/nodejs/commit-stream/compare/v2.2.0...v2.2.1) (2026-11-02)
 
 ### Bug Fixes
