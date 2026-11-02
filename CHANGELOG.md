@@ -1,3 +1,9 @@
+## [2.2.6](https://github.com/nodejs/commit-stream/compare/v2.2.5...v2.2.6) (2026-11-02)
+
+### Trivial Changes
+
+* **deps:** remove plugins bundled with semantic-release ([#34](https://github.com/nodejs/commit-stream/issues/34)) ([06f60dc](https://github.com/nodejs/commit-stream/commit/06f60dc4361d6fa77b9ac924737a030bdeae8f09))
+
 ## [2.2.5](https://github.com/nodejs/commit-stream/compare/v2.2.4...v2.2.5) (2026-11-02)
 
 ### Trivial Changes
