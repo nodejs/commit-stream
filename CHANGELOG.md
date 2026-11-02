@@ -1,3 +1,9 @@
+## [2.2.5](https://github.com/nodejs/commit-stream/compare/v2.2.4...v2.2.5) (2026-11-02)
+
+### Trivial Changes
+
+* remove readable-stream ([#35](https://github.com/nodejs/commit-stream/issues/35)) ([a26c5f2](https://github.com/nodejs/commit-stream/commit/a26c5f2aca82ae06aa4b1679b957e0dfa577020c))
+
 ## [2.2.4](https://github.com/nodejs/commit-stream/compare/v2.2.3...v2.2.4) (2026-11-02)
 
 ### Trivial Changes
