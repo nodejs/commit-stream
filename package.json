@@ -34,7 +34,7 @@
     "split2": "^4.2.0"
   },
   "dependencies": {
-    "through2": "^4.0.2"
+    "through2": "^5.0.12"
   },
   "release": {
     "branches": [
