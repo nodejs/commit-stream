@@ -1,3 +1,9 @@
+## [3.0.2](https://github.com/nodejs/commit-stream/compare/v3.0.1...v3.0.2) (2026-11-03)
+
+### Bug Fixes
+
+* recognize decorated commit headers ([#39](https://github.com/nodejs/commit-stream/issues/39)) ([4af8b86](https://github.com/nodejs/commit-stream/commit/4af8b86dc79203e2ebfca1f0368707cfb91a6cfe))
+
 ## [3.0.1](https://github.com/nodejs/commit-stream/compare/v3.0.0...v3.0.1) (2026-11-02)
 
 ### Bug Fixes

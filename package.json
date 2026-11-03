@@ -1,6 +1,6 @@
 {
   "name": "commit-stream",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "Turn a `git log` into a stream of commit objects",
   "main": "commit-stream.js",
   "types": "types/commit-stream.d.ts",
