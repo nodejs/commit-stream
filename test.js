@@ -234,6 +234,37 @@ test('cve id with 4 or more sequence digits', async () => {
   assert.deepStrictEqual(commits.map((c) => c.cveId), ids)
 })
 
+test('body lines starting with "PR" are not PR urls', async () => {
+  const commits = await toCommits([
+    'commit 0000000000000000000000000000000000000000',
+    'Author: Rod Vagg <rod@vagg.org>',
+    'Date:   Fri Apr 17 10:52:16 2015 +1000',
+    '',
+    '    PRs: tidy up docs',
+    '',
+    '    PRetty much done'
+  ])
+  assert.strictEqual(commits[0].prUrl, undefined)
+  assert.strictEqual(commits[0].summary, 'PRs: tidy up docs')
+  assert.deepStrictEqual(commits[0].description, ['PRetty much done'])
+})
+
+for (const line of ['PR-URL: #12', 'PR URL: #12', 'PRURL: #12', 'PR: #12']) {
+  test(`"${line}" is parsed as a PR url`, async () => {
+    const commits = await toCommits([
+      'commit 0000000000000000000000000000000000000000',
+      'Author: Rod Vagg <rod@vagg.org>',
+      'Date:   Fri Apr 17 10:52:16 2015 +1000',
+      '',
+      '    doc: tidy up',
+      '',
+      `    ${line}`
+    ], 'rvagg', 'commit-stream')
+    assert.strictEqual(commits[0].prUrl, 'https://github.com/rvagg/commit-stream/pull/12')
+    assert.strictEqual(commits[0].summary, 'doc: tidy up')
+  })
+}
+
 test('line before first commit header rejects pipeline', async () => {
   await assert.rejects(toCommits(['garbage']), {
     message: 'Unexpected line before first "commit" header: garbage'
