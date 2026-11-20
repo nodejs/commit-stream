@@ -97,7 +97,7 @@ export default function commitStream (ghUser, ghProject) {
       null
     ) {
       (commit.reviewers ??= []).push({ name: m[1], email: m[2] })
-    } else if ((m = line.match(/\bCVE-ID:\s+(CVE-\d{4}-\d{4,})\b/)) !== null) {
+    } else if ((m = line.match(/^\s*CVE-ID:\s+(CVE-\d{4}-\d{4,})\b/)) !== null) {
       commit.cveId = m[1]
     } else if ((m = line.match(/^\s+PR(?:[- ]?URL)?:\s*(.+)\s*$/) || line.match(/\(#(\d+)\)$/)) !== null) {
       commit.prUrl = m[1]

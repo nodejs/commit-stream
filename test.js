@@ -234,6 +234,36 @@ test('cve id with 4 or more sequence digits', async () => {
   assert.deepStrictEqual(commits.map((c) => c.cveId), ids)
 })
 
+test('CVE-ID on the summary line is kept as the summary', async () => {
+  const commits = await toCommits([
+    'commit 0000000000000000000000000000000000000000',
+    'Author: RafaelGSS <rafael.nunu@hotmail.com>',
+    'Date:   Fri Nov 22 00:19:29 2024 -0300',
+    '',
+    '    deps: CVE-ID: CVE-2024-1234 fix',
+    '',
+    '    body line one'
+  ])
+  assert.strictEqual(commits.length, 1)
+  assert.strictEqual(commits[0].summary, 'deps: CVE-ID: CVE-2024-1234 fix')
+  assert.deepStrictEqual(commits[0].description, ['body line one'])
+  assert.strictEqual(commits[0].cveId, undefined)
+})
+
+test('unindented CVE-ID line sets cveId', async () => {
+  const commits = await toCommits([
+    'commit 0000000000000000000000000000000000000000',
+    'Author: RafaelGSS <rafael.nunu@hotmail.com>',
+    'Date:   Fri Nov 22 00:19:29 2024 -0300',
+    '',
+    '    deps: fix vulnerability',
+    '',
+    'CVE-ID: CVE-2024-1234'
+  ])
+  assert.strictEqual(commits.length, 1)
+  assert.strictEqual(commits[0].cveId, 'CVE-2024-1234')
+})
+
 test('body lines starting with "PR" are not PR urls', async () => {
   const commits = await toCommits([
     'commit 0000000000000000000000000000000000000000',
