@@ -1,3 +1,9 @@
+## [3.0.3](https://github.com/nodejs/commit-stream/compare/v3.0.2...v3.0.3) (2026-11-20)
+
+### Bug Fixes
+
+* require colon after PR/PR-URL in body lines ([#40](https://github.com/nodejs/commit-stream/issues/40)) ([8dc0a80](https://github.com/nodejs/commit-stream/commit/8dc0a80605db85f5f2f142aae20de955635b7725))
+
 ## [3.0.2](https://github.com/nodejs/commit-stream/compare/v3.0.1...v3.0.2) (2026-11-03)
 
 ### Bug Fixes
