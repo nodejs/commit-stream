@@ -1,3 +1,9 @@
+## [3.0.4](https://github.com/nodejs/commit-stream/compare/v3.0.3...v3.0.4) (2026-11-20)
+
+### Bug Fixes
+
+* keep summary when it contains CVE-ID ([#41](https://github.com/nodejs/commit-stream/issues/41)) ([59b2bb5](https://github.com/nodejs/commit-stream/commit/59b2bb556cd024191e909be158046c98d679d890))
+
 ## [3.0.3](https://github.com/nodejs/commit-stream/compare/v3.0.2...v3.0.3) (2026-11-20)
 
 ### Bug Fixes
