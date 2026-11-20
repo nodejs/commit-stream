@@ -295,6 +295,24 @@ for (const line of ['PR-URL: #12', 'PR URL: #12', 'PRURL: #12', 'PR: #12']) {
   })
 }
 
+for (const line of ['see also (#12)', '* fix: squashed (#7)']) {
+  test(`body line "${line}" is kept in description`, async () => {
+    const commits = await toCommits([
+      'commit 0000000000000000000000000000000000000000',
+      'Author: Rod Vagg <rod@vagg.org>',
+      'Date:   Fri Apr 17 10:52:16 2015 +1000',
+      '',
+      '    doc: tidy up (#41)',
+      '',
+      `    ${line}`
+    ], 'rvagg', 'commit-stream')
+    assert.strictEqual(commits[0].prUrl, 'https://github.com/rvagg/commit-stream/pull/41')
+    assert.strictEqual(commits[0].ghIssue, 41)
+    assert.strictEqual(commits[0].summary, 'doc: tidy up')
+    assert.deepStrictEqual(commits[0].description, [line])
+  })
+}
+
 test('line before first commit header rejects pipeline', async () => {
   await assert.rejects(toCommits(['garbage']), {
     message: 'Unexpected line before first "commit" header: garbage'
